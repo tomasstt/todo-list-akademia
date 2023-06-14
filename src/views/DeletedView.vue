@@ -14,9 +14,10 @@
 <script>
 export default {
 
-  props: 
-    ['deletedTodos']
-  
+  props: {
+      deletedTodos: {
+      }
+}  
 
 };
 </script>
