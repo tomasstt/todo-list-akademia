@@ -6,20 +6,27 @@
     <ul >
       <li id="x" v-for="todo in todos" :key="todo.id " >
         {{ todo.text }}
-        <button @click="deleteTodo(todo)">Delete</button>
+        <button  @click="deleteTodo(todo)">X</button>
       </li>
     </ul>
     <router-link to="/deleted">Deleted Todos</router-link>
-    <router-view></router-view>
+    <router-view v-if="showDeletedView" :deletedTodos="deletedTodos"></router-view>
+   
   </div>
 </template>
 
 <script>
+import DeletedView from './views/DeletedView.vue';
 export default {
+  component: {
+   DeletedView
+  },
   data() {
     return {
       newTodo: "",
       todos: [],
+      deletedTodos: [],
+      showDeletedView:false
     };
   },
   methods: {
@@ -32,11 +39,15 @@ export default {
       }
     },
     deleteTodo(todo) { 
-     todo.deleted = true
+
      const index = this.todos.indexOf(todo);
-    if (index > -1) {
-    this.todos.splice(index, 1);
-  }
+      if (index !== -1) {
+        this.deletedTodos.push(todo);
+        this.todos.splice(index, 1);
+        this.showDeletedView = true;
+      }
+     
+  
     },
   },
 };
