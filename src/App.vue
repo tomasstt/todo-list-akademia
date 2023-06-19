@@ -1,32 +1,34 @@
 <template>
-  <div>
-    <h1>Todos</h1>
-    <input v-model="newTodo" placeholder="Todoooo ?" />
+  <div class="container-m">
+    
+    <img class="first" src="./assets/blob2.svg" alt="blob">
+    <img class="sec" src="./assets/blob1.svg" alt="blob">
+    <h1> <strong>The</strong>  Todos</h1>
+    <input v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
-    <ul >
-      <li id="x" v-for="todo in todos" :key="todo.id " >
+    <ul>
+      <li v-for="todo in todos" :key="todo.id" >
         {{ todo.text }}
-        <button  @click="deleteTodo(todo)">X</button>
+        <button class="delete-btn" @click="deleteTodo(todo)">Delete</button>
       </li>
     </ul>
-    <router-link to="/deleted">Deleted Todos</router-link>
-    <router-view v-if="showDeletedView" :deletedTodos="deletedTodos"></router-view>
-   
-  </div>
+    <a ><router-link to="/deleted">Deleted Ones</router-link></a>
+    <router-view></router-view>
+</div>
+<link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet">
+
 </template>
 
 <script>
 import DeletedView from './views/DeletedView.vue';
 export default {
-  component: {
-   DeletedView
-  },
+  components: {DeletedView},
   data() {
     return {
       newTodo: "",
       todos: [],
-      deletedTodos: [],
-      showDeletedView:false
+      deleted: false
     };
   },
   methods: {
@@ -38,23 +40,146 @@ export default {
         this.newTodo = "";
       }
     },
-    deleteTodo(todo) { 
-
-     const index = this.todos.indexOf(todo);
-      if (index !== -1) {
-        this.deletedTodos.push(todo);
-        this.todos.splice(index, 1);
-        this.showDeletedView = true;
-      }
-     
-  
+    deleteTodo(todo) {
+      todo.deleted = true;
     },
   },
 };
 </script>
-<style>
-* {
-  background: rgb(255, 255, 255);
+<style >
+body{
+   background: rgb(0, 0, 0);
+   overflow: hidden;
+}
+.first {
+  position: absolute;
+  top: -1cm;
+  left: -20%;
+z-index: -10;
+  width: 100%;
+  
+ background: transparent;
+ overflow: hidden;
+  
+
 }
 
+.sec{
+  position: absolute;
+  bottom: 0;
+  
+  right: -19cm;
+  overflow: hidden;
+z-index: -10;
+  width: 80%;
+ background: transparent;
+}
+
+li {
+  font-family: 'Druk Wide Bold', sans-serif;}
+strong{
+  font-family: 'Thei Personal Use', sans-serif;
+  font-size: 100px;
+  
+}
+ul{
+  width: 100%;
+}
+
+
+a{
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 19px;
+  display: flex;
+color: black;
+  place-content: center;
+  font-family: 'Druk Wide Bold', sans-serif;
+}
+
+h1{
+  font-weight: 700;
+font-size: 70px;
+font-family: 'Druk Wide Bold', sans-serif;
+display: flex;
+
+  place-content: center;
+  align-content: center;
+  align-items: center;
+
+}
+
+.container-m {
+display: grid;
+
+  place-content: center;
+  align-content: center;
+  align-items: center;
+  height: 90vh; /* Adjust the height as needed */
+max-width: 100%;
+}
+input{
+  background: transparent;
+  border: 1px solid;
+  font-family: 'Druk Wide Bold', sans-serif;
+}
+::placeholder{
+  color: black;
+  display: grid;
+  background: transparent;
+  text-align: center;
+  
+}
+button {
+  margin-top: 10px;
+  max-width: 100%;
+border: solid 2px;
+background: transparent;
+border-radius: 20px;
+font-family: 'Druk Wide Bold', sans-serif;
+
+}
+
+@media (max-width: 1400px){
+  .first {
+  position: absolute;
+  top: 0;
+  left: -10%;
+z-index: -10;
+  width: 200%;
+  
+ background: transparent;
+ overflow: hidden;
+  
+
+}
+
+.sec{
+  position: absolute;
+  bottom: -1cm;
+  
+  right: -0cm;
+  overflow: hidden;
+z-index: -10;
+  width: 160%;
+ background: transparent;
+}
+
+strong{
+  font-family: 'Thei Personal Use', sans-serif;
+  font-size: 100px;
+  
+}
+h1{
+  font-weight: 700;
+font-size: 40px;
+font-family: 'Druk Wide Bold', sans-serif;
+display: flex;
+
+  place-content: center;
+  align-content: center;
+  align-items: center;
+
+}
+}
 </style>
