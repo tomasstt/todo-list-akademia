@@ -1,17 +1,17 @@
 <template>
-  <div class="container-m">
-    
+  <div  class="container-m">
     <img class="first" src="./assets/blob2.svg" alt="blob">
     <img class="sec" src="./assets/blob1.svg" alt="blob">
     <h1> <strong>The</strong>  Todos</h1>
-    <input v-model="newTodo" placeholder="Todoooo?" />
+    <input ref="todoInput" v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
-    <ul>
+    <ul >
       <li v-for="todo in todos" :key="todo.id" >
         {{ todo.text }}
         <button class="delete-btn" @click="deleteTodo(todo)">Delete</button>
       </li>
     </ul>
+
     <a ><router-link to="/deleted">Deleted Ones</router-link></a>
     <router-view></router-view>
 </div>
@@ -21,14 +21,16 @@
 </template>
 
 <script>
+import TodoView from './views/TodoView.vue';
 import DeletedView from './views/DeletedView.vue';
 export default {
-  components: {DeletedView},
+  components: {DeletedView,TodoView},
   data() {
     return {
       newTodo: "",
       todos: [],
-      deleted: false
+      showDel: true,
+      deletedTodos:[]
     };
   },
   methods: {
@@ -36,12 +38,18 @@ export default {
       if (this.newTodo.trim() ) {
         this.todos.push({
           text: this.newTodo,
+          deleted: false,
+          
         });
         this.newTodo = "";
+        
       }
     },
     deleteTodo(todo) {
-      todo.deleted = true;
+      this.showDel = false,
+      this.deletedTodos.push(todo);
+      this.todos = this.todos.filter((todoItem) => todoItem !== todo);
+    
     },
   },
 };

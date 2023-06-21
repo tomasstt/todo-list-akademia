@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div >
     <h1>Deleted Todos</h1>
-    <ul>
-      <li v-for="todo in deletedTodos" :key="todo.id">
-      {{ todo.text }}
+    <ul  >
+      <li v-for="todo in $root.deletedTodos" :key="todo.id">
+        {{ todo.text }}
       </li>
     </ul>
     <router-link to="/">Todos</router-link>
@@ -21,10 +21,9 @@ export default {
   props: ['todos'],
   computed: {
     deletedTodos() {
-      return this.$root.todos.filter((todo) => todo.deleted);
+      return this.$root.deletedTodos;
     },
-  },
-};
+  },};
 </script>
 <style scoped>
 body {
@@ -63,9 +62,7 @@ display: grid;
   height: 90vh; /* Adjust the height as needed */
 max-width: 100%;
 }
-input{
-  
-}
+
 ::placeholder{
   color: black;
   display: grid;
