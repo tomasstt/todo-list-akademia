@@ -2,8 +2,8 @@
   <div  class="container-m">
     <img class="first" src="./assets/blob2.svg" alt="blob">
     <img class="sec" src="./assets/blob1.svg" alt="blob">
-    <h1> <strong>The</strong>  Todos</h1>
-    <input ref="todoInput" v-model="newTodo" placeholder="Todoooo?" />
+    <h1> <strong>The</strong>Todos</h1>
+    <input  v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
     <ul >
       <li v-for="todo in todos" :key="todo.id" >
@@ -12,7 +12,7 @@
       </li>
     </ul>
 
-    <a ><router-link to="/deleted">Deleted Ones</router-link></a>
+    <router-link to="/deleted">Deleted Ones</router-link>
     <router-view></router-view>
 </div>
 <link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
@@ -29,7 +29,6 @@ export default {
     return {
       newTodo: "",
       todos: [],
-      showDel: true,
       deletedTodos:[]
     };
   },
@@ -46,7 +45,6 @@ export default {
       }
     },
     deleteTodo(todo) {
-      this.showDel = false,
       this.deletedTodos.push(todo);
       this.todos = this.todos.filter((todoItem) => todoItem !== todo);
     
@@ -170,6 +168,93 @@ z-index: -10;
   overflow: hidden;
 z-index: -10;
   width: 160%;
+ background: transparent;
+}
+
+strong{
+  font-family: 'Thei Personal Use', sans-serif;
+  font-size: 100px;
+  
+}
+h1{
+  font-weight: 700;
+font-size: 40px;
+font-family: 'Druk Wide Bold', sans-serif;
+display: flex;
+
+  place-content: center;
+  align-content: center;
+  align-items: center;
+
+}
+}
+
+@media (max-width: 1900px){
+  .first {
+  position: absolute;
+  top: 0;
+  left: 10%;
+z-index: -10;
+  width: 180%;
+
+ background: transparent;
+ overflow: hidden;
+  
+
+}
+
+.sec{
+  position: absolute;
+  bottom: -1cm;
+  
+  right: -0cm;
+  overflow: hidden;
+z-index: -10;
+  width: 180%;
+ background: transparent;
+}
+
+strong{
+  font-family: 'Thei Personal Use', sans-serif;
+  font-size: 100px;
+  
+}
+h1{
+  font-weight: 700;
+font-size: 40px;
+font-family: 'Druk Wide Bold', sans-serif;
+display: flex;
+
+  place-content: center;
+  align-content: center;
+  align-items: center;
+
+}
+}
+
+
+@media (max-width: 1000px){
+  .first {
+  position: absolute;
+  top: 0;
+  left: 10%;
+z-index: -10;
+  width: 190%;
+
+ background: transparent;
+ overflow: hidden;
+  
+
+}
+
+.sec{
+  position: absolute;
+  bottom: -1cm;
+  
+  right: -0cm;
+  overflow: hidden;
+z-index: -10;
+  width: 120%;
  background: transparent;
 }
 
