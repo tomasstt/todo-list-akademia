@@ -5,14 +5,10 @@
     <h1> <strong>The</strong>Todos</h1>
     <input  v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
-    <ul >
-      <li v-for="todo in todos" :key="todo.id" >
-        {{ todo.text }}
-        <button class="delete-btn" @click="deleteTodo(todo)">Delete</button>
-      </li>
-    </ul>
+    <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" />
 
-    <router-link to="/deleted">Deleted Ones</router-link>
+
+    <router-link class="router" to="/deleted">Deleted Ones</router-link>
     <router-view></router-view>
 </div>
 <link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
@@ -23,8 +19,9 @@
 <script>
 import TodoView from './views/TodoView.vue';
 import DeletedView from './views/DeletedView.vue';
+import TodoList from  './components/TodoList.vue';
 export default {
-  components: {DeletedView,TodoView},
+  components: {TodoList,DeletedView,TodoView},
   data() {
     return {
       newTodo: "",
@@ -70,6 +67,7 @@ z-index: -10;
 
 }
 
+
 .sec{
   position: absolute;
   bottom: 0;
@@ -91,7 +89,9 @@ strong{
 ul{
   width: 100%;
 }
-
+.router{
+  margin-top: 30px;
+}
 
 a{
   text-decoration: none;
