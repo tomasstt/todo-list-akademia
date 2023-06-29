@@ -5,6 +5,7 @@
     <h1> <strong>The</strong>Todos</h1>
     <input  v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
+    <button @click="fetchTodos">FETCH TODOS</button>
     <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" />
 
 
@@ -20,6 +21,8 @@
 import TodoView from './views/TodoView.vue';
 import DeletedView from './views/DeletedView.vue';
 import TodoList from  './components/TodoList.vue';
+import axios from 'axios';
+
 export default {
   components: {TodoList,DeletedView,TodoView},
   data() {
@@ -31,21 +34,38 @@ export default {
   },
   methods: {
     addTodo() {
-      if (this.newTodo.trim() ) {
-        this.todos.push({
-          text: this.newTodo,
-          deleted: false,
-          
-        });
+  if (this.newTodo.trim()) {
+    axios.post('http://localhost:3000/todos', {
+        text: this.newTodo,
+        deleted: false,
+      })
+      .then(response => {
+        this.todos.push(response.data);
         this.newTodo = "";
-        
-      }
-    },
-    deleteTodo(todo) {
-      this.deletedTodos.push(todo);
+        console.log('Todo added:', response.data);
+      })
+      .catch(error => {
+        console.error('Error adding todo:', error);
+      });
+  }
+},
+deleteTodo(todo) {
+  this.deletedTodos.push(todo);
       this.todos = this.todos.filter((todoItem) => todoItem !== todo);
-    
+},
+
+fetchTodos() {
+      axios.get('http://localhost:3000/todos')
+        .then(response => {
+          this.todos = response.data;
+          console.log('Todos fetched:', this.todos);
+        })
+        .catch(error => {
+          console.error('Error fetching todos:', error);
+        });
     },
+
+
   },
 };
 </script>
@@ -121,7 +141,7 @@ display: grid;
   place-content: center;
   align-content: center;
   align-items: center;
-  height: 90vh; /* Adjust the height as needed */
+  height: 90vh; 
 max-width: 100%;
 }
 input{

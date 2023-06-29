@@ -1,0 +1,14 @@
+{
+  "todos": [
+    {
+      "text": "Make the dinner for who?",
+      "deleted": false,
+      "id": 1
+    },
+    {
+      "text": "Feed the dawg",
+      "deleted": false,
+      "id": 2
+    }
+  ]
+}
