@@ -6,7 +6,9 @@
     <input  v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
     <button @click="fetchTodos">FETCH TODOS</button>
+    <button @click="postTodo">POST TODOS</button>
     <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" />
+   
 
 
     <router-link class="router" to="/deleted">Deleted Ones</router-link>
@@ -34,21 +36,30 @@ export default {
   },
   methods: {
     addTodo() {
-  if (this.newTodo.trim()) {
-    axios.post('http://localhost:3000/todos', {
-        text: this.newTodo,
-        deleted: false,
-      })
-      .then(response => {
-        this.todos.push(response.data);
+      if (this.newTodo.trim()) {
+        this.todos.push({ text: this.newTodo, deleted: false });
         this.newTodo = "";
-        console.log('Todo added:', response.data);
-      })
-      .catch(error => {
-        console.error('Error adding todo:', error);
-      });
-  }
-},
+      }
+    },
+
+
+postTodo() {
+      if (this.newTodo.trim()) {
+        axios
+          .post('http://localhost:3000/todos', {
+            text: this.newTodo,
+            deleted: false,
+          })
+          .then((response) => {
+            this.todos.push(response.data);
+            this.newTodo = "";
+            console.log('Todo added:', response.data);
+          })
+          .catch((error) => {
+            console.error('Error adding todo:', error);
+          });
+      }
+    },
 deleteTodo(todo) {
   this.deletedTodos.push(todo);
       this.todos = this.todos.filter((todoItem) => todoItem !== todo);
