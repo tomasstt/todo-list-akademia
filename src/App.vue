@@ -33,6 +33,12 @@ export default {
       todos: [],
       deletedTodos:[]
     };
+  }, 
+  mounted() {
+    this.fetchTodos();
+    this.postTodo();
+    this.addTodo();
+    this.deleteTodo(todo);
   },
   methods: {
     addTodo() {
