@@ -21,7 +21,7 @@ export default {
   props: ['todos'],
   computed: {
     deletedTodos() {
-      return this.$root.deletedTodos;
+      return this.$root.deletedTodos;      
     },
   },};
 </script>

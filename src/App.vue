@@ -30,23 +30,23 @@ export default {
   data() {
     return {
       newTodo: "",
-      todos: [],
-      deletedTodos:[]
+      todos: JSON.parse(localStorage.getItem('todos')) || [],
+      deletedTodos:JSON.parse(localStorage.getItem('deletedTodos')) || [],
     };
   }, 
   mounted() {
-    this.fetchTodos();
     this.postTodo();
     this.addTodo();
-    this.deleteTodo(todo);
+    this.deleteTodo(todos);
   },
   methods: {
     addTodo() {
       if (this.newTodo.trim()) {
         this.todos.push({ text: this.newTodo, deleted: false });
         this.newTodo = "";
+        this.saveTodos();
       }
-    },
+    }, 
 
 
 postTodo() {
@@ -59,6 +59,7 @@ postTodo() {
           .then((response) => {
             this.todos.push(response.data);
             this.newTodo = "";
+            this.saveTodos();
             console.log('Todo added:', response.data);
           })
           .catch((error) => {
@@ -69,17 +70,28 @@ postTodo() {
 deleteTodo(todo) {
   this.deletedTodos.push(todo);
       this.todos = this.todos.filter((todoItem) => todoItem !== todo);
+      this.saveTodos();
+      
+
+
 },
 
 fetchTodos() {
       axios.get('http://localhost:3000/todos')
         .then(response => {
-          this.todos = response.data;
+         this.todos = response.data;      
+         this.saveTodos();
           console.log('Todos fetched:', this.todos);
         })
         .catch(error => {
           console.error('Error fetching todos:', error);
         });
+    },
+    
+    
+    saveTodos() {
+      localStorage.setItem('todos', JSON.stringify(this.todos));
+      localStorage.setItem('deletedTodos', JSON.stringify(this.deletedTodos));
     },
 
 
