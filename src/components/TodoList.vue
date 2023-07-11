@@ -7,7 +7,12 @@
 
 <script>
 export default {
-  props: ['todo'],
+  props: {
+    todo: {
+      type: Object,
+
+    },
+  },
   methods: {
     deleteTodo() {
       this.$emit('delete', this.todo);

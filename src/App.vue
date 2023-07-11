@@ -3,7 +3,7 @@
     <img class="first" src="./assets/blob2.svg" alt="blob">
     <img class="sec" src="./assets/blob1.svg" alt="blob">
     <h1> <strong>The</strong>Todos</h1>
-    <input  v-model="newTodo" placeholder="Todoooo?" />
+    <input   v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
     <button @click="fetchTodos">FETCH TODOS</button>
     <button @click="postTodo">POST TODOS</button>
@@ -20,80 +20,40 @@
 </template>
 
 <script>
-import TodoView from './views/TodoView.vue';
-import DeletedView from './views/DeletedView.vue';
-import TodoList from  './components/TodoList.vue';
-import axios from 'axios';
+import { mapState, mapActions } from 'vuex';
+import TodoList from './components/TodoList.vue';
 
 export default {
-  components: {TodoList,DeletedView,TodoView},
-  data() {
+components: {
+  TodoList,
+
+}, data() {
     return {
-      newTodo: "",
-      todos: JSON.parse(localStorage.getItem('todos')) || [],
-      deletedTodos:JSON.parse(localStorage.getItem('deletedTodos')) || [],
+      newTodo: '',
     };
-  }, 
-  mounted() {
-    this.postTodo();
-    this.addTodo();
-    this.deleteTodo(todos);
   },
+
+
+
+  computed: {
+    ...mapState([ 'todos', 'deletedTodos']), 
+    
+  },
+
   methods: {
+    ...mapActions(['postTodo', 'fetchTodos']),
+
     addTodo() {
       if (this.newTodo.trim()) {
-        this.todos.push({ text: this.newTodo, deleted: false });
-        this.newTodo = "";
-        this.saveTodos();
-      }
-    }, 
+      this.$store.commit('addTodo' , this.newTodo); 
+      this.newTodo = '';
+    }},
 
-
-postTodo() {
-      if (this.newTodo.trim()) {
-        axios
-          .post('http://localhost:3000/todos', {
-            text: this.newTodo,
-            deleted: false,
-          })
-          .then((response) => {
-            this.todos.push(response.data);
-            this.newTodo = "";
-            this.saveTodos();
-            console.log('Todo added:', response.data);
-          })
-          .catch((error) => {
-            console.error('Error adding todo:', error);
-          });
-      }
-    },
-deleteTodo(todo) {
-  this.deletedTodos.push(todo);
-      this.todos = this.todos.filter((todoItem) => todoItem !== todo);
-      this.saveTodos();
-      
-
-
-},
-
-fetchTodos() {
-      axios.get('http://localhost:3000/todos')
-        .then(response => {
-         this.todos = response.data;      
-         this.saveTodos();
-          console.log('Todos fetched:', this.todos);
-        })
-        .catch(error => {
-          console.error('Error fetching todos:', error);
-        });
-    },
-    
-    
-    saveTodos() {
-      localStorage.setItem('todos', JSON.stringify(this.todos));
-      localStorage.setItem('deletedTodos', JSON.stringify(this.deletedTodos));
+    deleteTodo(todo) {
+      this.$store.commit('deleteTodo', todo); 
     },
 
+   
 
   },
 };
@@ -115,6 +75,7 @@ z-index: -10;
   
 
 }
+
 
 
 .sec{
@@ -192,7 +153,7 @@ border: solid 2px;
 background: transparent;
 border-radius: 20px;
 font-family: 'Druk Wide Bold', sans-serif;
-
+cursor: pointer;
 }
 
 @media (max-width: 1400px){

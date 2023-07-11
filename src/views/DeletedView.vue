@@ -8,22 +8,18 @@
     </ul>
     <router-link to="/">Todos</router-link>
       <router-view></router-view>
-
+  
 </div>
 </template>
 
 <script>
-import TodoList from '../components/TodoList.vue';
-import TodoView from '../views/TodoView.vue'
+import { mapState } from 'vuex'; 
 
 export default {
-  components: {TodoList,TodoView},
-  props: ['todos'],
   computed: {
-    deletedTodos() {
-      return this.$root.deletedTodos;      
-    },
-  },};
+    ...mapState(['deletedTodos']),
+  },
+};
 </script>
 <style scoped>
 
