@@ -1,62 +1,87 @@
 <template>
-  <div  class="container-m">
+  <div class="container-m">
     <img class="first" src="./assets/blob2.svg" alt="blob">
     <img class="sec" src="./assets/blob1.svg" alt="blob">
-    <h1> <strong>The</strong>Todos</h1>
-    <input   v-model="newTodo" placeholder="Todoooo?" />
+    <h1><strong>The</strong> Todos</h1>
+    <input v-model="newTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
     <button @click="fetchTodos">FETCH TODOS</button>
     <button @click="postTodo">POST TODOS</button>
-    <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" />
-   
-
+    <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" @edit="selectTodo" />
+    <DetailsView :todo="selectedTodo" @update="updateTodo" v-if="selectedTodo" />
 
     <router-link class="router" to="/deleted">Deleted Ones</router-link>
+ 
     <router-view></router-view>
-</div>
-<link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
-<link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet">
-
+  </div>
+  <link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet">
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { defineComponent, ref, computed } from 'vue';
 import TodoList from './components/TodoList.vue';
+import DetailsView from './views/DetailsView.vue';
+import { useStore } from './store';
 
-export default {
-components: {
-  TodoList,
-
-}, data() {
-    return {
-      newTodo: '',
+export default defineComponent({
+  components: {
+    TodoList,
+    DetailsView,
+  },
+  setup() {
+    const store = useStore();
+    const selectedTodo = ref(null);
+    const newTodo = ref('');
+    const addTodo = () => {
+      store.addTodo({
+        text: newTodo.value,
+        completed: false,
+      });
+      newTodo.value = '';
     };
-  },
 
-
-
-  computed: {
-    ...mapState([ 'todos', 'deletedTodos']), 
+    const todos = computed(() => store.todos);
     
-  },
 
-  methods: {
-    ...mapActions(['postTodo', 'fetchTodos']),
+    const deleteTodo = (todo) => {
+      store.deleteTodo(todo);
+    };
 
-    addTodo() {
-      if (this.newTodo.trim()) {
-      this.$store.commit('addTodo' , this.newTodo); 
-      this.newTodo = '';
-    }},
+    const selectTodo = (todo) => {
+      selectedTodo.value = todo;
+    };
+    
 
-    deleteTodo(todo) {
-      this.$store.commit('deleteTodo', todo); 
-    },
+    const updateTodo = ({ todo, text }) => {
+      store.editTodo({ todo, text });
+      selectedTodo.value = null;
+    };
 
-   
+    const postTodo = () => {
+      store.postTodo();
+    };
 
-  },
-};
+    const fetchTodos = () => {
+      store.fetchTodos();
+    };
+
+    return {
+      todos,
+      postTodo,
+      fetchTodos,
+      newTodo,
+      addTodo,
+      deleteTodo,
+      selectTodo,
+      selectedTodo,
+      updateTodo,
+    };
+ 
+  
+},
+
+});
 </script>
 <style >
 body{
@@ -74,6 +99,9 @@ z-index: -10;
  overflow: hidden;
   
 
+}
+.completed {
+  text-decoration: line-through;
 }
 
 
@@ -146,15 +174,35 @@ input{
   text-align: center;
   
 }
+
+
+
+li {
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+}
+
+span {
+  flex-grow: 1;
+}
+
 button {
+ 
+
+
+
   margin-top: 10px;
-  max-width: 100%;
+
+max-width: 100%;
 border: solid 2px;
 background: transparent;
 border-radius: 20px;
 font-family: 'Druk Wide Bold', sans-serif;
 cursor: pointer;
 }
+
+
 
 @media (max-width: 1400px){
   .first {
