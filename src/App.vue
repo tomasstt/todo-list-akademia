@@ -7,16 +7,17 @@
     <button @click="addTodo">Add Todo</button>
     <button @click="fetchTodos">FETCH TODOS</button>
     <button @click="postTodo">POST TODOS</button>
-    <TodoList v-for="todo in todos" :key="todo.id" :todo="todo" @delete="deleteTodo" @edit="selectTodo" />
+    <TodoList v-for="todo in todos" :key="todo.id"  :todo="todo" @delete="deleteTodo" @edit="selectTodo" />
     <DetailsView :todo="selectedTodo" @update="updateTodo" v-if="selectedTodo" />
-
+    <div class="count">{{ unCount }} Unfinished Todos</div>
+    
     <router-link class="router" to="/deleted">Deleted Ones</router-link>
- 
     <router-view></router-view>
-  </div>
+  </div>        
   <link href="https://fonts.cdnfonts.com/css/thei-personal-use" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/druk-wide-bold" rel="stylesheet">
 </template>
+
 
 <script>
 import { defineComponent, ref, computed } from 'vue';
@@ -42,6 +43,11 @@ export default defineComponent({
     };
 
     const todos = computed(() => store.todos);
+    const nonDeletedTodos = computed(() => store.todos.filter(todo => !todo.deleted));
+    const unCount = computed(() => {
+      return todos.value.filter(todo => !todo.completed).length;
+    });
+
     
 
     const deleteTodo = (todo) => {
@@ -75,7 +81,9 @@ export default defineComponent({
       deleteTodo,
       selectTodo,
       selectedTodo,
+      unCount,
       updateTodo,
+      nonDeletedTodos
     };
  
   
@@ -100,9 +108,18 @@ z-index: -10;
   
 
 }
-.completed {
-  text-decoration: line-through;
+
+.count  {
+  
+  display: flex;
+  font-family: 'Druk Wide Bold', sans-serif;
+  place-content: center;
+  margin-top: 16px;
+ color: rgb(255, 206, 45);
+
 }
+
+
 
 
 

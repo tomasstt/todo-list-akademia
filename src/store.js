@@ -14,11 +14,10 @@ export const useStore = defineStore('store',{
   actions: {
     addTodo({text}) {
         const newTodo = {
-          isLoading: false,
           text: text,
           deleted: false,
           completed: false,
-
+          isLoading: false,
         }; 
         this.todos.push(newTodo);
         localStorage.setItem('todos', JSON.stringify(this.todos));
@@ -56,6 +55,8 @@ export const useStore = defineStore('store',{
    {
         this.todos.splice(index, 1);
         localStorage.setItem('todos', JSON.stringify(this.todos));
+   
+  
       }
       this.deletedTodos.push(todo);
       localStorage.setItem('deletedTodos', JSON.stringify(this.deletedTodos));
@@ -69,7 +70,7 @@ export const useStore = defineStore('store',{
       const index = this.deletedTodos.findIndex((t) => t.id === todo.id);
       if (index !== -1) {
         const restoredTodo = this.deletedTodos.splice(index, 1)[0];
-        restoredTodo.deleted = false; // Ensure 'deleted' property is present and set it to false
+        restoredTodo.deleted = false; 
         this.todos.push(restoredTodo);
         localStorage.setItem('deletedTodos', JSON.stringify(this.deletedTodos));
         localStorage.setItem('todos', JSON.stringify(this.todos));
@@ -82,17 +83,15 @@ export const useStore = defineStore('store',{
     async postTodo() {
       if (this.newTodo.trim()) {
         try {
-          this.isLoading = true;
           const response = await axios.post('http://localhost:3000/todos', {
-            text: this.newTodo,
-            deleted: false,
+            text: text,
+            deleted: false
+  
           });
           this.addTodo();
           console.log('Todo added:', response.data);
         } catch (error) {
           console.error('Error adding todo:', error);
-        }finally {
-          this.isLoading = false; 
         }
 
       }
@@ -110,5 +109,6 @@ export const useStore = defineStore('store',{
       }
 
     },
+    
   },
 });

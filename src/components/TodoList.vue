@@ -1,8 +1,9 @@
 <template>
   <li :class="{ completed: todo.completed }">
-    <span>{{ todo.text }}</span>
+    <span >{{ todo.text }}</span>
     <button class="delete-btn" @click="deleteTodo">Delete</button>
     <button class="edit-btn" @click="editTodo">Edit</button>
+
   </li>
 </template>
 
@@ -12,6 +13,8 @@ export default {
     todo: {
       type: Object,
       required: true,
+     
+
     },
   },
   methods: {

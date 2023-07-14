@@ -7,7 +7,7 @@
         <button @click="restoreTodoToTodos(todo)">Restore</button>
       </li>
     </ul>
-    <router-link to="/">Todos</router-link>
+    <router-link to="/">Close Deleted</router-link>
     <router-view></router-view>
   </div>
 </template>
@@ -20,7 +20,6 @@ import { useStore } from '../store';
 export default defineComponent({
   setup() {
     const store = useStore();
-
     const deletedTodos = store.deletedTodos;
 
     const restoreTodoToTodos = (todo) => {
