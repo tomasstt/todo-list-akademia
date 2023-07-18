@@ -7,7 +7,7 @@
         <button @click="restoreTodoToTodos(todo)">Restore</button>
       </li>
     </ul>
-    <router-link to="/">Close Deleted</router-link>
+    <router-link to="/">Close Deleted </router-link>
     <router-view></router-view>
   </div>
 </template>

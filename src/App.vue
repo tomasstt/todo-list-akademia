@@ -3,11 +3,11 @@
     <img class="first" src="./assets/blob2.svg" alt="blob">
     <img class="sec" src="./assets/blob1.svg" alt="blob">
     <h1><strong>The</strong> Todos</h1>
-    <input v-model="newTodo" placeholder="Todoooo?" />
+    <input v-model="newTodo" @keydown.enter="addTodo" placeholder="Todoooo?" />
     <button @click="addTodo">Add Todo</button>
     <button @click="fetchTodos">FETCH TODOS</button>
     <button @click="postTodo">POST TODOS</button>
-    <TodoList v-for="todo in todos" :key="todo.id"  :todo="todo" @delete="deleteTodo" @edit="selectTodo" />
+    <TodoList v-for="todo in todos" :key="todo.id"  :todo="todo" @delete="deleteTodo"  @edit="selectTodo" />
     <DetailsView :todo="selectedTodo" @update="updateTodo" v-if="selectedTodo" />
     <div class="count">{{ unCount }} Unfinished Todos</div>
     
@@ -20,76 +20,66 @@
 
 
 <script>
-import { defineComponent, ref, computed } from 'vue';
 import TodoList from './components/TodoList.vue';
 import DetailsView from './views/DetailsView.vue';
 import { useStore } from './store';
 
-export default defineComponent({
+export default {
   components: {
     TodoList,
-    DetailsView,
+    DetailsView
   },
-  setup() {
-    const store = useStore();
-    const selectedTodo = ref(null);
-    const newTodo = ref('');
-    const addTodo = () => {
-      store.addTodo({
-        text: newTodo.value,
-        completed: false,
-      });
-      newTodo.value = '';
-    };
-
-    const todos = computed(() => store.todos);
-    const nonDeletedTodos = computed(() => store.todos.filter(todo => !todo.deleted));
-    const unCount = computed(() => {
-      return todos.value.filter(todo => !todo.completed).length;
-    });
-
-    
-
-    const deleteTodo = (todo) => {
-      store.deleteTodo(todo);
-    };
-
-    const selectTodo = (todo) => {
-      selectedTodo.value = todo;
-    };
-    
-
-    const updateTodo = ({ todo, text }) => {
-      store.editTodo({ todo, text });
-      selectedTodo.value = null;
-    };
-
-    const postTodo = () => {
-      store.postTodo();
-    };
-
-    const fetchTodos = () => {
-      store.fetchTodos();
-    };
-
+  data() {
     return {
-      todos,
-      postTodo,
-      fetchTodos,
-      newTodo,
-      addTodo,
-      deleteTodo,
-      selectTodo,
-      selectedTodo,
-      unCount,
-      updateTodo,
-      nonDeletedTodos
+      store: null,
+      selectedTodo: null,
+      newTodo: '',
     };
- 
-  
-},
+  },
+  computed: {
+    todos() {
+      return this.store.todos;
+    },
+    nonDeletedTodos() {
+      return this.store.todos.filter(todo => !todo.deleted);
+    },
+    unCount() {
+      return this.todos.filter(todo => !todo.completed).length;
+    },
+  },
+  methods: {
+    addTodo() {
+      if (this.newTodo.trim() !== '') {
+        this.store.addTodo({
+          text: this.newTodo,
+          completed: false,
+        });
+        this.newTodo = '';
+      }
+    },
+    deleteTodo(todo) {
+      this.store.deleteTodo(todo);
+    },
+    selectTodo(todo) {
+      this.selectedTodo = todo;
+    },
+    updateTodo({ todo, text }) {
+      this.store.editTodo({ todo, text });
+      this.selectedTodo = null;
+    },
+    postTodo() {
+      this.store.postTodo();
+    },
+    fetchTodos() {
+      this.store.fetchTodos();
+    },
+  },
+  created() {
+    this.store = useStore();
+  },
+};
 
-});
+
 </script>
 <style >
 body{

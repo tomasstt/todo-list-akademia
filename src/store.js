@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const useStore = defineStore('store',{
-  
+export const useStore = defineStore('store', {
   state() {
     return {
       newTodo: '',
@@ -10,6 +9,21 @@ export const useStore = defineStore('store',{
       deletedTodos: JSON.parse(localStorage.getItem('deletedTodos')) || [],
     };
   }, 
+  getters: {
+  
+    getTodos: (state) => {
+      return state.todos;
+    },
+    getUnDeletedTodos: (state) => {
+      return state.todos.filter((todo) => !todo.deleted);
+    },
+    getUnfinishedCount: (state) => {
+      return state.todos.filter((todo) => !todo.completed).length;
+    },   
+    getDeletedTodos: (state) => {
+      return state.todos.filter(todo => todo.deleted);
+    },
+  },
 
   actions: {
     addTodo({text}) {
@@ -55,8 +69,8 @@ export const useStore = defineStore('store',{
    {
         this.todos.splice(index, 1);
         localStorage.setItem('todos', JSON.stringify(this.todos));
-   
-  
+        
+
       }
       this.deletedTodos.push(todo);
       localStorage.setItem('deletedTodos', JSON.stringify(this.deletedTodos));
@@ -84,9 +98,9 @@ export const useStore = defineStore('store',{
       if (this.newTodo.trim()) {
         try {
           const response = await axios.post('http://localhost:3000/todos', {
-            text: text,
+            text: this.newTodo, 
             deleted: false
-  
+
           });
           this.addTodo();
           console.log('Todo added:', response.data);
