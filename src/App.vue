@@ -37,11 +37,9 @@ export default {
     };
   },
   computed: {
-   
     todos() {
       return this.store.getTodos;
     },
-
     nonDeletedTodos() {
       return this.store.getUnDeletedTodos;
     },
@@ -51,7 +49,6 @@ export default {
      deletedTodos() {
       return this.store.getDeletedTodos;
     },
-
   },
 
   methods: {
