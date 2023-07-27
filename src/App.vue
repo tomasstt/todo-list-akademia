@@ -37,16 +37,24 @@ export default {
     };
   },
   computed: {
+    // Instead of directly accessing this.store.todos, use the getter getTodos
     todos() {
-      return this.store.todos;
+      return this.store.getTodos;
     },
+    // Use the getUnDeletedTodos getter
     nonDeletedTodos() {
-      return this.store.todos.filter(todo => !todo.deleted);
+      return this.store.getUnDeletedTodos;
     },
+    // Use the getUnfinishedCount getter
     unCount() {
-      return this.todos.filter(todo => !todo.completed).length;
+      return this.store.getUnfinishedCount;
+    },   
+     deletedTodos() {
+      return this.store.getDeletedTodos;
     },
+
   },
+
   methods: {
     addTodo() {
       if (this.newTodo.trim() !== '') {
