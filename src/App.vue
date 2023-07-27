@@ -37,15 +37,14 @@ export default {
     };
   },
   computed: {
-    // Instead of directly accessing this.store.todos, use the getter getTodos
+   
     todos() {
       return this.store.getTodos;
     },
-    // Use the getUnDeletedTodos getter
+
     nonDeletedTodos() {
       return this.store.getUnDeletedTodos;
     },
-    // Use the getUnfinishedCount getter
     unCount() {
       return this.store.getUnfinishedCount;
     },   
